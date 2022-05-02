@@ -29,7 +29,6 @@
         <!--Tab Bar Controller-->
         <scene sceneID="wFk-cg-GfN">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="a86-JV-Fx0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <tabBarController id="vOy-iW-9eu" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="iv7-vb-1Yn">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
@@ -41,6 +40,7 @@
                         <segue destination="p4d-79-ZBb" kind="relationship" relationship="viewControllers" id="8N6-a6-CyP"/>
                     </connections>
                 </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="a86-JV-Fx0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1314" y="7"/>
         </scene>
@@ -299,10 +299,10 @@
             </objects>
             <point key="canvasLocation" x="376.81159420289856" y="448.66071428571428"/>
         </scene>
-        <!--Diray Detail View Controller-->
+        <!--Diary Detail View Controller-->
         <scene sceneID="bxS-fG-1Lw">
             <objects>
-                <viewController id="fQR-yt-nlq" customClass="DirayDetailViewController" customModule="Diary" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="DiaryDetailViewController" id="fQR-yt-nlq" customClass="DiaryDetailViewController" customModule="Diary" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="b2E-EG-VBk">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
