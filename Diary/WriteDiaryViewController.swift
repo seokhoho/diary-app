@@ -1,0 +1,103 @@
+//
+//  WriteDirayViewController.swift
+//  Diary
+//
+//  Created by 정유진 on 2022/04/13.
+//
+
+import UIKit
+
+protocol WriteDiaryViewDelegate: AnyObject {
+    func didSelectReigster(diary: Diary)
+    //이 메서드에 일기가 작성된 diary개체를 전달할 것이다
+}
+
+class WriteDiaryViewController: UIViewController {
+
+    @IBOutlet weak var titleTextField: UITextField!
+    @IBOutlet weak var contentsTextView: UITextView!
+    @IBOutlet weak var dateTextField: UITextField!
+    @IBOutlet weak var confirmButton: UIBarButtonItem!
+    
+    private let datePicker = UIDatePicker()
+    private var diaryDate: Date?
+    weak var delegate: WriteDiaryViewDelegate?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.configureContentsTextView()
+        self.configureDatePicker()
+        self.configureInputField()
+        self.confirmButton.isEnabled = false
+    }
+    
+    private func configureContentsTextView() {
+        let borderColor = UIColor(red: 220/255, green: 220/255, blue: 220/255, alpha: 1.0)
+        self.contentsTextView.layer.borderColor = borderColor.cgColor
+        //layer관련 색상설정에는 UIColor가 아닌 cgColor를 사용
+        self.contentsTextView.layer.borderWidth = 0.5
+        //layer의 크기를 0.5만큼
+        self.contentsTextView.layer.cornerRadius = 5.0
+        //layer의 코너 둥글기 값을 5.0로 둥글게 표현
+    }
+    
+    private func configureDatePicker() {
+        self.datePicker.datePickerMode = .date
+        self.datePicker.preferredDatePickerStyle = .wheels
+        self.datePicker.addTarget(self, action: #selector(datePickerValueDidChange(_:)), for: .valueChanged)
+        self.datePicker.locale = Locale(identifier: "ko_KR")
+        self.dateTextField.inputView = self.datePicker
+    }
+    
+    private func configureInputField() {
+        self.contentsTextView.delegate = self
+        self.titleTextField.addTarget(self, action: #selector(titleTextFieldDidChange(_:)), for: .editingChanged)
+        self.dateTextField.addTarget(self, action: #selector(dateTextFieldDidChange(_:)), for: .editingChanged)
+    }
+    
+    @IBAction func tapConfirmButton(_ sender: UIBarButtonItem) {
+        guard let title = self.titleTextField.text else { return }
+        guard let contents = self.contentsTextView.text else { return }
+        guard let date = self.diaryDate else { return }
+        //diaryDate 프로퍼티를 대입시켜서 datePicker에서 선택된 date 타입을 가져온다
+        let diary = Diary(title: title, contents: contents, date: date, isStar: false)
+        self.delegate?.didSelectReigster(diary: diary)
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    @objc private func datePickerValueDidChange(_ datePicker: UIDatePicker) {
+        let formatter = DateFormatter()
+        //DateFormatter()는 날짜와 텍스트를 변환해주는 역할
+        //쉽게 date type <-> 문자열
+        formatter.dateFormat = "yyyy년 MM월 dd일(EEEEE)"
+        //어떤 형태의 문자열로 바꿀 것인지 포멧설정
+        formatter.locale = Locale(identifier: "ko_KR")
+        self.diaryDate = datePicker.date
+        self.dateTextField.text = formatter.string(from: datePicker.date)
+        self.dateTextField.sendActions(for: .editingChanged)
+    }
+    
+    @objc private func titleTextFieldDidChange(_ textField: UITextField) {
+        self.validateInputField()
+    }
+    @objc private func dateTextFieldDidChange(_ textField: UITextField) {
+        self.validateInputField()
+    }
+    
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    private func validateInputField() {
+        self.confirmButton.isEnabled = !(self.titleTextField.text?.isEmpty ?? true) && !(self.dateTextField.text?.isEmpty ?? true) && !self.contentsTextView.text.isEmpty
+    }
+    
+}
+
+extension WriteDiaryViewController: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        self.validateInputField()
+    }
+        
+}
