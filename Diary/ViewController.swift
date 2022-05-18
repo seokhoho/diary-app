@@ -161,3 +161,4 @@ extension ViewController: DiaryDetailViewDelegate {
         self.collectionView.deleteItems(at: [indexPath])
     }
 }
+//xcode git commit test
