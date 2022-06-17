@@ -89,18 +89,30 @@ class WriteDiaryViewController: UIViewController {
         guard let contents = self.contentsTextView.text else { return }
         guard let date = self.diaryDate else { return }
         //diaryDate 프로퍼티를 대입시켜서 datePicker에서 선택된 date 타입을 가져온다
-        let diary = Diary(title: title, contents: contents, date: date, isStar: false)
+        
         
         switch self.diaryEditorMode {
         case .new:
+            let diary = Diary(
+                uuidString: UUID().uuidString,
+                title: title,
+                contents: contents,
+                date: date,
+                isStar: false
+            )
             self.delegate?.didSelectReigster(diary: diary)
-        case let .edit(indexPath, _):
+        case let .edit(indexPath, diary):
+            let diary = Diary(
+                uuidString: diary.uuidString,
+                title: title,
+                contents: contents,
+                date: date,
+                isStar: diary.isStar
+            )
             NotificationCenter.default.post(
                 name: NSNotification.Name("editDiary"),
                 object: diary,
-                userInfo: [
-                    "indexPath.row": indexPath.row
-                ]
+                userInfo: nil
             )
         }
         
